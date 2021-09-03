@@ -19,6 +19,8 @@
 #include "imgui/imgui.h"
 #include "imgui/imgui_impl_glfw_gl3.h"
 
+#include "tests/TestClearColor.h"
+
 
 int main(void)
 {
@@ -55,7 +57,7 @@ int main(void)
 
     {
 
-        float positions[] = {
+        /*float positions[] = {
             -50.0f, -50.0f, 0.0f, 0.0f,
              50.0f, -50.0f, 1.0f, 0.0f,
              50.0f,  50.0f, 1.0f, 1.0f,
@@ -65,12 +67,12 @@ int main(void)
         unsigned int indices[] = {
             0, 1, 2,
             2, 3, 0
-        };
+        };*/
 
         GLCall(glEnable(GL_BLEND));
         GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
 
-        VertexArray va;
+        /*VertexArray va;
         VertexBuffer vb(positions, 4 * 4 * sizeof(float));
         
         VertexBufferLayout layout;
@@ -99,7 +101,7 @@ int main(void)
         va.Unbind();
         vb.Unbind();
         ib.Unbind();
-        shader.Unbind();
+        shader.Unbind();*/
 
         Renderer renderer;
 
@@ -107,21 +109,26 @@ int main(void)
         ImGui_ImplGlfwGL3_Init(window, true);
         ImGui::StyleColorsDark();
 
-        glm::vec3 translationA(200, 200, 0);
+        test::TestClearColor test;
+
+        /*glm::vec3 translationA(200, 200, 0);
         glm::vec3 translationB(400, 200, 0);
 
         float r = 0.0f;
-        float increment = 0.05f;
-        /* Loop until the user closes the window */
+        float increment = 0.05f;*/
+
         while (!glfwWindowShouldClose(window))
         {
-            /* Render here */
             renderer.Clear();
 
+            test.OnUpdate(0.0f);
+            test.OnRender();
+
             ImGui_ImplGlfwGL3_NewFrame();
+            test.OnImGuiRender();
 
             
-            
+           /* 
             {
                 glm::mat4 model = glm::translate(glm::mat4(1.0f), translationA);
                 glm::mat4 mvp = proj * view * model;
@@ -151,14 +158,12 @@ int main(void)
                 ImGui::SliderFloat3("Translation B", &translationB.x, 0.0f, 960.0f);
                 ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
             }
+            */
 
             ImGui::Render();
             ImGui_ImplGlfwGL3_RenderDrawData(ImGui::GetDrawData());
 
-            /* Swap front and back buffers */
             GLCall(glfwSwapBuffers(window));
-
-            /* Poll for and process events */
             GLCall(glfwPollEvents());
         }
     }
